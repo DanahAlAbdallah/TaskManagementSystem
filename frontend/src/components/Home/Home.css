@@ -1,0 +1,32 @@
+.semicircle {
+    height: 200px;
+    width: 700px;
+    /* background-color: aqua; */
+    border-top-right-radius: 350px; 
+    border-bottom-right-radius: 350px;/* Adjust this value to control the curvature */
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
+  }
+  
+  /* Style the button to make it visually align with the semicircle */
+  .semicircle button {
+    position: absolute;
+    bottom: 20px; /* Adjust this value as needed */
+    left: 50px; /* Adjust this value as needed */
+  }
+  
+  
+  .key-container::before {
+    content: '';
+    position: absolute;
+    top: -10px; /* Adjust as needed for positioning */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent; /* Adjust as needed for key handle */
+    border-right: 20px solid transparent; /* Adjust as needed for key handle */
+    border-bottom: 20px solid #818cf8; /* Match background color */
+  }
+  

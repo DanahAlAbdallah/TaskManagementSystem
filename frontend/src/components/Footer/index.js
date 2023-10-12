@@ -1,5 +1,6 @@
 import React from "react";
 import { FaFacebook, FaYoutube } from 'react-icons/fa';
+import { Link } from "react-router-dom";
 function Footer() {
   return (
     <>
@@ -7,7 +8,7 @@ function Footer() {
         <div className="p-5">
           <ul>
             <p className="text-white font-bold text-4xl pb-4 mt-4">
-              <img src='/logo.png'/>
+             <Link to='/'><img src='/logo.png'/></Link> 
             </p>
           </ul>
         </div>
@@ -38,7 +39,7 @@ function Footer() {
 
       </div>
       <div className="flex flex-col justify-center items-center text-center p-2 bg-primary">
-        <h1 className="text-white font-semibold">
+        <h1 className="text-white ml-10 font-semibold">
           © 2023-2024 All rights reserved 
         </h1>
       </div>

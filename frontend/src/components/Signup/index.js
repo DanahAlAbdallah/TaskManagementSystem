@@ -8,7 +8,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function Signup() {
   const navigate = useNavigate();
+  const [emailError, setEmailError] = useState('');
   // const [passwordMatchError, setPasswordMatchError] = useState('');
+  const [firstNameError, setFirstNameError] = useState('');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -19,47 +21,42 @@ function Signup() {
     gender: '',
   });
 
-  const [validationErrors, setValidationErrors] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    firstName: '',
-    lastName: '',
-    age: '',
-    gender: '',
-  });
+
 
   const handleChange = (e) => {
+    e.preventDefault();
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
-
-    // Clear validation error when the user starts typing
-    setValidationErrors({
-      ...validationErrors,
-      [name]: '',
-    });
   };
+
+
+  console.log(firstNameError)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if the password and confirm password match
-    if (formData.password !== formData.confirmPassword) {
-      setValidationErrors({
-        ...validationErrors,
-      confirmPassword: 'wrong password',
-      });
-      return;
+
+    if(formData.Email === ''){
+      setEmailError("Email Required");
+    }else if(!isValidEmail(formData.email)){
+      setEmailError("Incorrect Email");
     }
-    console.log(formData.confirmPassword)
+    else{
+      setEmailError('');
+    }
 
-    // Clear password match error
-    // setPasswordMatchError('');
+    // if (formData.firstName.trim() === '') {
+    //   console.log('Setting first name error');
+    //   setFirstNameError('First name is required');
+    //   return;
+    // }
+    // console.log(firstNameError)
+    
 
-    // Prepare data to send to the API
+    
     const userData = {
       Email: formData.email,
       password: formData.password,
@@ -100,28 +97,7 @@ function Signup() {
   }
     
 
-  // Function to validate form data
-  const validateForm = (userData) => {
-    const errors = {};
-
-    // Validate email
-    if (!userData.email) {
-      errors.email = 'Email is required';
-    } else if (!isValidEmail(userData.email)) {
-      errors.email = 'Invalid email format';
-    }
-
-    // Validate password
-    if (!userData.password) {
-      errors.password = 'Password is required';
-    } else if (userData.password.length < 6) {
-      errors.password = 'Password must be at least 6 characters long';
-    }
-
-    // Add more validation rules for other fields as needed
-
-    return errors;
-  };
+  
 
   // Function to check if the email format is valid
   const isValidEmail = (email) => {
@@ -157,7 +133,7 @@ function Signup() {
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
                   />
-                  <div className="text-red-600 text-sm">{validationErrors.firstName}</div>
+                  <div className="text-red-600 text-sm">{firstNameError}</div>
                 </div>
                 <div>
                   <label
@@ -176,7 +152,7 @@ function Signup() {
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
                   />
-                  <div className="text-red-600 text-sm">{validationErrors.lastName}</div>
+                  {/* <div className="text-red-600 text-sm">{validationErrors.lastName}</div> */}
                 </div>
               </div>
               {/* Add similar validation error messages for other fields */}
@@ -198,7 +174,7 @@ function Signup() {
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
                   />
-                  <div className="text-red-600 text-sm">{validationErrors.age}</div>
+                  {/* <div className="text-red-600 text-sm">{validationErrors.age}</div> */}
                 </div>
                 <div>
                   <label
@@ -218,7 +194,7 @@ function Signup() {
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                   </select>
-                  <div className="text-red-600 text-sm">{validationErrors.gender}</div>
+                  {/* <div className="text-red-600 text-sm">{validationErrors.gender}</div> */}
                 </div>
               </div>
               <div>
@@ -238,7 +214,7 @@ function Signup() {
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                 />
-                <div className="text-red-600 text-sm">{validationErrors.email}</div>
+                <div className="text-red-600 text-sm">{emailError}</div>
               </div>
               <div>
                 <label
@@ -257,7 +233,7 @@ function Signup() {
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                 />
-                <div className="text-red-600 text-sm">{validationErrors.password}</div>
+                {/* <div className="text-red-600 text-sm">{validationErrors.password}</div> */}
               </div>
               <div>
                 <label
@@ -276,7 +252,7 @@ function Signup() {
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                 />
-                <div className="text-red-600 text-sm">{validationErrors.confirmPassword}</div>
+                {/* <div className="text-red-600 text-sm">{validationErrors.confirmPassword}</div> */}
               </div>
               <button
                 type="submit"

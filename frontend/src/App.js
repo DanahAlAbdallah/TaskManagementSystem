@@ -10,8 +10,11 @@ import Contact from './components/Contact';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Login from './components/Login';
-import ResetPassword from './components/ResetPassword';
 import AdminDashboad from './components/AdminDashboard';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
+import UserHome from './components/UserHome';
+import Schedule from './components/Schedule';
 
 
 
@@ -30,11 +33,15 @@ function App() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
       <Route path="/about" element={<Home1 />} />
-      <Route path="/resetPassword" element={<ResetPassword />} />
+      <Route path="/Home" element={<UserHome />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/Admin/Dashboard" element={<AdminDashboad />} />
+      <Route path="/tasks" element={<Schedule />} />
+      <Route path="/reset_password/:id/:token" element={<ResetPassword />}/>
       <Route path="*" element={<NotFound />} />
     </Routes>
-    <Footer />
+    {window.location.pathname === '/' && window.location.pathname === '/signup' && window.location.pathname === '/login' && <Footer />}
+    
   </>
 </Router>
 

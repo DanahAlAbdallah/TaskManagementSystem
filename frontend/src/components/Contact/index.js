@@ -4,44 +4,69 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Contact() {
-  const [formData, setFormData] = useState({
-    email: '',
-    subject: '',
-    message: '',
-  });
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [subject, setSubject] = useState('');
+  const [subjectError, setsubjectError] = useState('');
+  const [message, setMessage] = useState('');
+  const [messageError, setMessageError] = useState('');
+
+  
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleSubjectChange = (e) => {
+    setSubject(e.target.value);
+  };
+
+  const handleMessageChange = (e) => {
+    setMessage(e.target.value);
+  };
+
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
+    if(email ===''){
+      setEmailError('Enter your email')
+    }else if(!isValidEmail(email)){
+      setEmailError('Invalid email')
+    }else if(subject ===''){
+      setsubjectError('Subject Required')
+      setEmailError('')
+    }else if(message ===''){
+      setMessageError('Message Required')
+      setsubjectError('')
+    }else{
+      setEmailError('')
+      setsubjectError('')
+      setMessageError('')
+    
     try {
-      // Make an HTTP POST request to your API or server endpoint.
-      const response = await axios.post('http://localhost:3000/message/contactus', formData);
+      const response = await axios.post('http://localhost:3000/message/contactus', {email,subject,message});
 
-      // Assuming the request was successful, show a success toast.
       toast.success('Message sent successfully!', {
         position: 'top-right',
         autoClose: 3000,
       });
 
-      // Optionally, you can clear the form fields.
-      setFormData({
-        email: '',
-        subject: '',
-        message: '',
-      });
+      setEmail('')
+      setSubject('')
+      setMessage('')
     } catch (error) {
-      // Handle any errors here and show an error toast if necessary.
       toast.error('Message sending failed. Please try again later.', {
         position: 'top-right',
         autoClose: 3000,
       });
       console.error('Error sending message:', error);
-    }
+    }}
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  
+  const isValidEmail = (email) => {
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,5}$/;
+    return emailPattern.test(email);
   };
 
   return (
@@ -51,7 +76,7 @@ function Contact() {
         <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-primary dark:text-white">
           Contact Us
         </h2>
-        <form onSubmit={handleFormSubmit} className="space-y-8">
+        <form className="space-y-8">
           <div>
             <label
               htmlFor="email"
@@ -63,12 +88,13 @@ function Contact() {
               type="email"
               id="email"
               name="email"
-              value={formData.email}
-              onChange={handleInputChange}
+              value={email}
+              onChange={handleEmailChange}
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
               placeholder="name@example.com"
               required
             />
+            <div className="text-red-600 text-sm">{emailError}</div>
           </div>
           <div>
             <label
@@ -81,12 +107,13 @@ function Contact() {
               type="text"
               id="subject"
               name="subject"
-              value={formData.subject}
-              onChange={handleInputChange}
+              value={subject}
+              onChange={handleSubjectChange}
               className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
               placeholder="Let us know how we can help you"
               required
             />
+             <div className="text-red-600 text-sm">{subjectError}</div>
           </div>
           <div className="sm:col-span-2">
             <label
@@ -99,14 +126,16 @@ function Contact() {
               id="message"
               name="message"
               rows="6"
-              value={formData.message}
-              onChange={handleInputChange}
+              value={message}
+              onChange={handleMessageChange}
               className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="Leave a comment..."
             ></textarea>
+            <div className="text-red-600 text-sm">{messageError}</div>
           </div>
           <button
             type="submit"
+            onClick={handleFormSubmit}
             className="py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-primary sm:w-fit hover:bg-gray-400 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
           >
             Send message

@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { text } from 'express';
 import connect from './config/connectDB.js';
 import cors from 'cors';
 import { config } from 'dotenv';
@@ -7,6 +7,11 @@ import  tasksRoute  from './routes/taskRoute.js';
 import  projectRoute  from './routes/projectRoute.js';
 import AuthRoute from './routes/AuthRoute.js';
 import contactRoute from './routes/contactRoute.js';
+import nodemailer from 'nodemailer';
+import UserModel from './models/User.js';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+
 
 // Initialize dotenv
 config();
@@ -36,6 +41,86 @@ app.use('/tasks', tasksRoute);
 app.use('/projects', projectRoute);
 app.use('/message', contactRoute);
 app.use('/', AuthRoute);
+
+
+app.use(cors({ origin: 'http://localhost:3001' }));
+app.post('/forgot-password', (req, res) => {
+  const {email} = req.body;
+  UserModel.findOne({Email: email})
+  .then(user => {
+      if(!user) {
+          return res.send({Status: "User not existed"})
+      } 
+      const token = jwt.sign({id: user._id}, process.env.ACCESS, {expiresIn: "1d"})
+      var transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: 'danaalabdallah02@gmail.com',
+            pass: 'agbh vmbr imlz qvvr'
+          }
+        });
+        var mailOptions = {
+          from: 'danaalabdallah02@gmail.com',
+          to: email,
+         
+          subject: 'Reset Password Link',
+          text: `http://localhost:3001/reset_password/${user._id}/${token}`
+        };
+        
+        transporter.sendMail(mailOptions, function(error, info){
+          if (error) {
+            console.log(error);
+          } else {
+            return res.send({Status: "Success"})
+          }
+        });
+  })
+})
+
+
+
+app.post('/reset-password/:id/:token', async (req, res) => {
+  const { id, token } = req.params;
+  const { password } = req.body;
+  console.log("in reset");
+  console.log("Received Password:", password);
+
+  try {
+    // Verify the JWT token
+    jwt.verify(token, process.env.ACCESS, async (err, decoded) => {
+      if (err) {
+        console.error("Token Verification Error:", err);
+        return res.json({ Status: "Error with token" });
+      }
+
+      // Hash the new password
+      let hashedPassword;
+      try {
+        hashedPassword = await bcrypt.hash(password, 10);
+        console.log("Hashed Password:", hashedPassword);
+
+        // Update the user's password in the database
+        try {
+          await UserModel.findByIdAndUpdate(id, { password: hashedPassword });
+          console.log("reset done");
+          res.json({ Status: "Success" });
+        } catch (updateError) {
+          console.error("Update Error:", updateError);
+          res.status(500).json({ Status: "Error updating password" });
+        }
+      } catch (hashError) {
+        console.error("Hashing Error:", hashError);
+        res.status(500).json({ Status: "Error hashing the password" });
+      }
+    });
+  } catch (verificationError) {
+    console.error("Verification Error:", verificationError);
+    res.status(500).json({ Status: "Error during password reset" });
+  }
+});
+
+
+
 
 app.listen(process.env.PORT, function() {
   connect();

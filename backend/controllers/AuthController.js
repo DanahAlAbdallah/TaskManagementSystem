@@ -94,7 +94,7 @@ export const Login = asyncHandler(async (req, res) => {
 
 
 export const logout = asyncHandler(async (req, res) => {
-    localStorage.removeItem("accessToken");
+    localStorage.removeItem("token");
     window.location.href = "/"; 
   }
 )

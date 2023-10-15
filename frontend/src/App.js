@@ -15,7 +15,9 @@ import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import UserHome from './components/UserHome';
 import Schedule from './components/Schedule';
-
+import CreateProject from './components/CreateProject';
+import { useLocation } from "react-router-dom";
+import MyProjects from './components/MyProjects';
 
 
 function App() {
@@ -28,6 +30,7 @@ function App() {
     <ToastContainer />
     {window.location.pathname === '/' && <NavBar />} {/* Render NavBar only on the home page */}
     {window.location.pathname === '/signup' && <NavBar />}
+    {window.location.pathname === '/login' && <NavBar />}
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/signup" element={<Signup />} />
@@ -37,10 +40,14 @@ function App() {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/Admin/Dashboard" element={<AdminDashboad />} />
       <Route path="/tasks" element={<Schedule />} />
+      <Route path="/create_project" element={<CreateProject />} />
+      <Route path="/my_projects" element={<MyProjects />} />
       <Route path="/reset_password/:id/:token" element={<ResetPassword />}/>
       <Route path="*" element={<NotFound />} />
     </Routes>
-    {window.location.pathname === '/' && window.location.pathname === '/signup' && window.location.pathname === '/login' && <Footer />}
+    {window.location.pathname === '/' &&  <Footer />}
+    {window.location.pathname === '/signup' &&  <Footer />}
+    {window.location.pathname === '/login' &&  <Footer />}
     
   </>
 </Router>

@@ -27,6 +27,21 @@ export const getProjectById = async(req, res) => {
   }
 };
 
+//for
+export const getProjectByTeamleader = async(req, res) => {
+  try {
+    const team_leader = req.params.teamleader;
+    const project = await Project.findById(team_leader)
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+    res.json(project);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+    console.log(error);
+  }
+};
+
 export const addProject = async(req, res) => {
   try {
     const newProject= new Project(req.body);

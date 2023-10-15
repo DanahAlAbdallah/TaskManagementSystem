@@ -18,7 +18,8 @@ export const Login = asyncHandler(async (req, res) => {
         user: {
           eEmailmail: user.Email,
           id: user._id,
-          role: user.isAdmin
+          role: user.isAdmin,
+         
         },
       },
       process.env.ACCESS,
@@ -26,7 +27,7 @@ export const Login = asyncHandler(async (req, res) => {
     );
     
     
-    res.status(200).json({ accessToken: token, role: user.isAdmin });
+    res.status(200).json({ accessToken: token, role: user.isAdmin, id: user._id });
   } else {
     res.status(401).json({ error: "Email or Password is not valid" });
   }

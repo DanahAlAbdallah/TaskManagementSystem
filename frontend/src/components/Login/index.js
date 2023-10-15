@@ -45,6 +45,9 @@ const handleLogin = (e) => {
       console.log("Login successful:", response.data);
       const isAdmin = response.data.role;
       localStorage.setItem('role', isAdmin);
+
+      const id = response.data.id;
+      localStorage.setItem('id', id);
       if(isAdmin){
         navigate('/Admin/Dashboard');
       }else{

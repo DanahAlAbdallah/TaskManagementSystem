@@ -44,6 +44,8 @@ app.use('/', AuthRoute);
 
 
 app.use(cors({ origin: 'http://localhost:3001' }));
+
+//for forget password
 app.post('/forgot-password', (req, res) => {
   const {email} = req.body;
   UserModel.findOne({Email: email})
@@ -77,7 +79,7 @@ app.post('/forgot-password', (req, res) => {
   })
 })
 
-
+//for reset
 
 app.post('/reset-password/:id/:token', async (req, res) => {
   const { id, token } = req.params;
@@ -118,6 +120,40 @@ app.post('/reset-password/:id/:token', async (req, res) => {
     res.status(500).json({ Status: "Error during password reset" });
   }
 });
+
+//for add by email 
+app.post('/addbyEmail', (req, res) => {
+  const {email, teamleader} = req.body;
+  UserModel.findOne({Email: email})
+  .then(user => {
+      if(!user) {
+          return res.send({Status: "User not existed"})
+      } 
+      const token = jwt.sign({id: user._id}, process.env.ACCESS, {expiresIn: "1d"})
+      var transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: 'danaalabdallah02@gmail.com',
+            pass: 'agbh vmbr imlz qvvr'
+          }
+        });
+        var mailOptions = {
+          from: 'AchieveTeam@outlook.com',
+          to: email,
+         
+          subject: 'Invite To Project Link',
+          text: `http://localhost:3001/login`
+        };
+        
+        transporter.sendMail(mailOptions, function(error, info){
+          if (error) {
+            console.log(error);
+          } else {
+            return res.send({Status: "Success"})
+          }
+        });
+  })
+})
 
 
 

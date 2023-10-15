@@ -1,20 +1,26 @@
-import React from 'react'
-import Sidebar from '../Sidebar'
+import React, { useEffect } from 'react';
+import Sidebar from '../Sidebar';
 import { useNavigate } from 'react-router-dom';
 import Schedule from '../Schedule';
+import CreateProject from '../CreateProject'
 
 function UserHome() {
     const navigate = useNavigate();
-    const token = localStorage.getItem('token');
-    if(!token){
-     navigate('/login')
-    }
-  return (
-    <div>
-        <Sidebar/>
-        <Schedule/>
-    </div>
-  )
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+        }
+    }, []); // Empty dependency array ensures this effect runs once when the component mounts
+
+    return (
+        <div>
+            <Sidebar />
+            {/* <Schedule /> */}
+            <CreateProject/>
+        </div>
+    );
 }
 
-export default UserHome
+export default UserHome;

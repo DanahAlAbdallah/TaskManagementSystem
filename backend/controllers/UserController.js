@@ -16,7 +16,7 @@ export const getUsers = async(req, res) => {
 export const getUserById = async(req, res) => {
   try {
     const id = req.params.id;
-    const user = await User.findById(id).populate({path:"projects_assigned", select:['title']});
+    const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -26,6 +26,21 @@ export const getUserById = async(req, res) => {
   }
 };
 
+//get user by email
+export const getUserByEmail = async (req, res) => {
+  try {
+    const { email } = req.body; // Assuming you pass the email as a parameter
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 // POST a new user
 export const addUser = async(req, res) => {
   try {

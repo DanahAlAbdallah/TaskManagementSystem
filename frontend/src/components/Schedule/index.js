@@ -9,7 +9,7 @@ function Schedule() {
         Schedule
       </h2>
 
-      <div class="mt-4">
+      {/* <div class="mt-4">
         <a href="#" title=""
           class="inline-flex items-center text-lg font-medium text-primary-600 hover:underline dark:text-primary-500">
           Learn more about our agenda
@@ -20,7 +20,7 @@ function Schedule() {
               clip-rule="evenodd" />
           </svg>
         </a>
-      </div>
+      </div> */}
     </div>
 
     <div class="flow-root max-w-3xl mx-auto mt-8 sm:mt-12 lg:mt-16">

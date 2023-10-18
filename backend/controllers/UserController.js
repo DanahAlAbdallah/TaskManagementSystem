@@ -49,6 +49,7 @@ export const addUser = async(req, res) => {
     res.status(201).json(savedUser);
   } catch (error) {
     res.status(400).json({ message: 'Bad request' });
+    console.log(error);
   }
 };
 

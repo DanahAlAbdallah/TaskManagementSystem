@@ -84,6 +84,7 @@ function Signup() {
         // Handle specific errors or display a generic error message
         if (response.status === 400) {
           console.error('Bad Request:', response.data.error);
+
           // Display the error message to the user
           // You can update state or show an error message on the form
         } else {

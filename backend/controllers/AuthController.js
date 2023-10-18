@@ -81,6 +81,7 @@ export const Login = asyncHandler(async (req, res) => {
     } catch (error) {
       console.error("Registration failed:", error);
       res.status(500).json({ error: "Registration failed" });
+      console.log(error);
     }
   });
   

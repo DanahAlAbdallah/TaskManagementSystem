@@ -18,6 +18,7 @@ import Schedule from './components/Schedule';
 import CreateProject from './components/CreateProject';
 import { useLocation } from "react-router-dom";
 import MyProjects from './components/MyProjects';
+import ProjectDetails from './components/ProjectDetails';
 
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
       <Route path="/create_project" element={<CreateProject />} />
       <Route path="/my_projects" element={<MyProjects />} />
       <Route path="/reset_password/:id/:token" element={<ResetPassword />}/>
+      <Route path="/project_details/:projectId" element={<ProjectDetails />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
     {window.location.pathname === '/' &&  <Footer />}

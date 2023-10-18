@@ -86,7 +86,7 @@ const userId = localStorage.getItem('id');
       // Fetch user IDs for each email in team_members
       for (const email of team_members) {
         try {
-          const response = await axios.get(`http://localhost:3000/users/getUser`,{email});
+          const response = await axios.get(`http://localhost:3000/users/getUserByEmail?email=${email}`);
           const user = response.data;
           console.log(user)
           userIds.push(user._id); // Assuming '_id' is the field that stores user IDs

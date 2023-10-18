@@ -22,7 +22,10 @@ team_members: [
     type : Schema.Types.ObjectId,
     ref : 'task'
   },
-  createdAt : Date
+  createdAt : { 
+  type: Schema.Types.Date,
+  default: Date.now
+} 
 });
 
 const ProjectModel = model('Project', ProjectSchema);

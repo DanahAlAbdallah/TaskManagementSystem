@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import UserProjectsCard from '../ProjectsCard';
 import Sidebar from '../Sidebar';
+import axios from 'axios';
 
 const MyProjects = () => {
   // Sample project data (replace with your data)
@@ -8,12 +9,20 @@ const MyProjects = () => {
   const userid = localStorage.getItem('id');
 
   useEffect(() => {
-    // Fetch or set your project data here
-    const fetchedProjects = axios.get()
+    // Inside a function to use async/await
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/projects/my_projects/${userid}`);
+        setProjects(response.data);
+        console.log(projects.createdAt)
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+      }
+    };
 
-    setProjects(fetchedProjects);
-  }, []);
-
+    fetchData();
+  }, []); 
+console.log(projects)
   return (
     <>
     <Sidebar/>

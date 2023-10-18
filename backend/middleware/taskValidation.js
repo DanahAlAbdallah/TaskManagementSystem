@@ -1,5 +1,8 @@
+import mongoose from 'mongoose';
+
 const validateTaskData = (req, res, next) => {
-    const { title, body, priority, author, assigned_userId, tags, createdAt, updatedAt } = req.body;
+  
+    const { title, body, priority, author, assigned_userId,dueDate, tags, createdAt, updatedAt } = req.body;
   
     // Check if required fields are present
     if (!title || !body || !priority || !author || !assigned_userId) {

@@ -25,7 +25,9 @@ export const getTaskById = async(req, res) => {
 
 export const addTask = async(req, res) => {
   try {
+    console.log("here")
     const newTask= new Task(req.body);
+    console.log(req.body)
     const savedTask = await newTask.save();
     res.status(201).json(savedTask);
   } catch (error) {

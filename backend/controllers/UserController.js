@@ -29,8 +29,8 @@ export const getUserById = async(req, res) => {
 //get user by email
 export const getUserByEmail = async (req, res) => {
   try {
-    const { email } = req.body; // Assuming you pass the email as a parameter
-    const user = await User.findOne({ email });
+    const  email  = req.query.email; // Assuming you pass the email as a parameter
+    const user = await User.findOne({ Email: email });
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });

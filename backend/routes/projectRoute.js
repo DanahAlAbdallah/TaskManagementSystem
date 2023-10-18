@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getProjects,getProjectById,addProject,updateProject,deleteProject} from '../controllers/ProjectController.js';
+import { getProjects,getProjectById,addProject,updateProject,deleteProject, getProjectsByTeamLeader,removeTeamMember,getTeamMembersByProjectId} from '../controllers/ProjectController.js';
 import { validateProjectData } from '../middleware/projectValidation.js';
 const projectRoute = Router(); 
 
@@ -8,5 +8,9 @@ projectRoute.delete('/deleteProject/:id', deleteProject);
 projectRoute.get('/getProjects', getProjects);
 projectRoute.get('/getProject/:id', getProjectById);
 projectRoute.post('/addProject', addProject);
+projectRoute.get('/my_projects/:teamleader', getProjectsByTeamLeader);
+projectRoute.post('/remove_member/:projectId', removeTeamMember);
+projectRoute.get('/getEmails/:projectId', getTeamMembersByProjectId);
+
 
 export default projectRoute;

@@ -16,6 +16,7 @@ const taskSchema = new Schema({
     required : true
   },
   tags: [String],
+  dueDate: Date,
   createdAt: Date,
   updatedAt: Date
 });

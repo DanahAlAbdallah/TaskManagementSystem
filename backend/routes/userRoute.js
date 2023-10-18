@@ -8,7 +8,7 @@ usersRoute.put('/updateUser/:id', updateUser);
 usersRoute.delete('/deleteUser/:id', deleteUser);
 usersRoute.get('/getUsers', getUsers);
 usersRoute.get('/getUser/:id', getUserById);
-usersRoute.get('/getUser', getUserByEmail);
+usersRoute.get('/getUserByEmail', getUserByEmail);
 usersRoute.post('/addUser',validateUserData, addUser);
 
 export default usersRoute;

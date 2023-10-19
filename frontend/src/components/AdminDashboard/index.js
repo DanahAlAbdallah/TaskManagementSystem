@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Chart from 'chart.js/auto';
 
 function AdminDashboard() {
   const token = localStorage.getItem('token');
@@ -48,6 +49,51 @@ function AdminDashboard() {
       .catch((error) => {
         console.error('Error fetching number of tasks:', error);
       });
+      const populateProjectTasksChart = async () => {
+        try {
+          const response = await fetch('http://localhost:3000/projects/getProjects', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+  
+          if (response.ok) {
+            const data = await response.json();
+            const projectNames = data.map((entry) => entry.projectName);
+            const taskCounts = data.map((entry) => entry.taskCount);
+  
+            const ctx = document.getElementById('projectTasksChart').getContext('2d');
+            new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: projectNames,
+                datasets: [
+                  {
+                    label: 'Number of Tasks',
+                    data: taskCounts,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                  },
+                ],
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  },
+                },
+              },
+            });
+          } else {
+            console.error('Failed to fetch data for the chart.');
+          }
+        } catch (error) {
+          console.error('Error fetching chart data:', error);
+        }
+      };
+  
+      populateProjectTasksChart();
   }, [token]);
   return (
   role === 'true' ? (
@@ -67,6 +113,9 @@ function AdminDashboard() {
           <div className='text-4xl font-bold'>{numTasks}</div>
         </div>
       </div>
+      <div className='mt-5'>
+          <canvas id='projectTasksChart' width='400' height='200'></canvas>
+        </div>
     </div>
   )  : (
       <h1 style={{ color: 'red' }}>You are not authorized to view this page.</h1>

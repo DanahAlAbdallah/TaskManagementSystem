@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 const validateTaskData = (req, res, next) => {
     const { title, body, priority, author, assigned_userId, tags, createdAt, updatedAt } = req.body;
   

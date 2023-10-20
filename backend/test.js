@@ -61,12 +61,25 @@ app.post('/forgot-password', (req, res) => {
             pass: 'agbh vmbr imlz qvvr'
           }
         });
+
+        const emailContent = `
+        <html>
+          <body>
+            <p>Hello ${user.first_name},</p>
+            <p>We received a request to reset your password.</p>
+            <p>To reset your password, click on the following link:</p>
+            <a href="http://localhost:3001/reset_password/${user._id}/${token}">Reset Password</a>
+            <p>If you did not request a password reset, please ignore this email.</p>
+          </body>
+        </html>
+      `;
         var mailOptions = {
           from: 'danaalabdallah02@gmail.com',
           to: email,
          
           subject: 'Reset Password Link',
-          text: `http://localhost:3001/reset_password/${user._id}/${token}`
+          text: `http://localhost:3001/reset_password/${user._id}/${token}`,
+          html: emailContent,
         };
         
         transporter.sendMail(mailOptions, function(error, info){
@@ -123,7 +136,7 @@ app.post('/reset-password/:id/:token', async (req, res) => {
 
 //for add by email 
 app.post('/addbyEmail', (req, res) => {
-  const {email, teamleader} = req.body;
+  const {email} = req.body;
   UserModel.findOne({Email: email})
   .then(user => {
       if(!user) {
@@ -137,12 +150,24 @@ app.post('/addbyEmail', (req, res) => {
             pass: 'agbh vmbr imlz qvvr'
           }
         });
+        const emailContent = `
+        <html>
+          <body>
+            <p>Hello ${user.first_name},</p>
+            <p>You've been invited to join a project!</p>
+            <p>Click on the following link to Login:</p>
+            <a href="http://localhost:3001/login">Login to Project</a>
+          </body>
+        </html>
+      `;
+
         var mailOptions = {
           from: 'AchieveTeam@outlook.com',
           to: email,
          
           subject: 'Invite To Project Link',
-          text: `http://localhost:3001/login`
+          text: `http://localhost:3001/login`,
+          html: emailContent,
         };
         
         transporter.sendMail(mailOptions, function(error, info){

@@ -10,6 +10,28 @@ export const getTasks = async(req, res) => {
   }
 };
 
+export const getTasksByAssignedUserId = async (req, res) => {
+  const { assignedUserId, projectId } = req.params;
+  // const { projectId } = req.body;
+
+  try {
+    console.log("Received request for assignedUserId:", assignedUserId);
+    console.log("Received request for projectId:", projectId);
+
+    const tasks = await Task.find({ assigned_userId: assignedUserId, projectId })
+     
+      .populate({ path: "assigned_userId", select: ['first_name', 'last_name'] });
+    console.log("Tasks retrieved:", tasks);
+
+    res.json(tasks);
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
 export const getTaskById = async(req, res) => {
   try {
     const id = req.params.id;
@@ -19,6 +41,26 @@ export const getTaskById = async(req, res) => {
     }
     res.json(task);
   } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const updateIsDone = async (req, res) => {
+  console.log("here")
+  try {
+    const { taskId } = req.params; // Extract taskId from request parameters
+    const { isDone } = req.body; // Extract the new isDone value from the request body
+
+    // Find the task by taskId and update the isDone property
+    const updatedTask = await Task.findByIdAndUpdate(taskId, { isDone }, { new: true });
+
+    if (!updatedTask) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+
+    return res.status(200).json(updatedTask);
+  } catch (error) {
+    console.error('Error updating task isDone:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };

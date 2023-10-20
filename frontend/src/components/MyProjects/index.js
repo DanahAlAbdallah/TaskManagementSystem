@@ -7,7 +7,10 @@ const MyProjects = () => {
   // Sample project data (replace with your data)
   const [projects, setProjects] = useState([]);
   const userid = localStorage.getItem('id');
-
+  const token  = localStorage.getItem('token')
+  if (!token){
+    window.location.href = "/login"
+  }
   useEffect(() => {
     // Inside a function to use async/await
     const fetchData = async () => {

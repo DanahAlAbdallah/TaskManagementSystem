@@ -19,6 +19,8 @@ import CreateProject from './components/CreateProject';
 import { useLocation } from "react-router-dom";
 import MyProjects from './components/MyProjects';
 import ProjectDetails from './components/ProjectDetails';
+import TeamProjects from './components/TeamProjects';
+import TeamProjectsDetails from './components/TeamProjectsDetails';
 
 
 function App() {
@@ -45,6 +47,9 @@ function App() {
       <Route path="/my_projects" element={<MyProjects />} />
       <Route path="/reset_password/:id/:token" element={<ResetPassword />}/>
       <Route path="/project_details/:projectId" element={<ProjectDetails />} />
+      <Route path="/team_projects" element={<TeamProjects />} />
+      <Route path="/TeamProjects/:projectId" element={<TeamProjectsDetails />} />
+      
       <Route path="*" element={<NotFound />} />
     </Routes>
     {window.location.pathname === '/' &&  <Footer />}

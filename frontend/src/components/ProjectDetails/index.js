@@ -3,13 +3,17 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from '../Sidebar';
 import AddTask from '../AddTask';
+import AddMember from '../AddMember';
 
 function ProjectDetails() {
   const [project, setProject] = useState({});
   const [membersId, setMembersId] = useState([]);
   const [members, setMembers] = useState([]);
   const { projectId } = useParams();
-
+  const token  = localStorage.getItem('token')
+  if (!token){
+    window.location.href = "/login"
+  }
   useEffect(() => {
     
     const fetchData = async () => {
@@ -77,7 +81,11 @@ function ProjectDetails() {
   return (
     <>
     <Sidebar/>
+    
     <div className='ml-80 text-2xl font-bold text-primary mb-10 mt-10'>{project.title}</div>
+    <div className='mb-10'>
+    <AddMember/>
+    </div>
     <div className="bg-gray-100 p-6 rounded-lg shadow-lg flex space-x-6 w-1/2 ml-80 pr-32">
     <div className="flex-1">
       {project.gg && (
@@ -104,7 +112,7 @@ function ProjectDetails() {
             <th className="px-4 text-primary text-sm py-2">Email</th>
           </tr>
         </thead>
-        <tbody className='border-solid text-gray-600'>
+        <tbody className='border-solid text-gray-600 bg-white'>
           {members.map((member) => (
             <tr key={member._id}>
               <td className="border px-4 py-2">{member.first_name}</td>

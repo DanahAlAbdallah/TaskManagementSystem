@@ -8,7 +8,10 @@ const year = date.getFullYear();
 const month = date.getMonth() + 1; 
 const day = date.getDate();
 const fulldate = day + '-' + month + '-' + year;
-
+const token  = localStorage.getItem('token')
+if (!token){
+  window.location.href = "/login"
+}
   return (
     <Link to = {`/project_details/${projectId}`}>
     <div className="bg-gray-200 rounded-lg shadow-lg w-80 m-4 p-4">

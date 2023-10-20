@@ -5,6 +5,11 @@ const taskSchema = new Schema({
   title: String,
   body: String,
   priority: String,
+  projectId: { 
+    type : Schema.Types.ObjectId,
+    ref : 'Project',
+    required : true
+  },
   author: { 
     type : Schema.Types.ObjectId,
     ref : 'User',
@@ -15,6 +20,7 @@ const taskSchema = new Schema({
     ref : 'User',
     required : true
   },
+  isDone: Boolean,
   tags: [String],
   dueDate: Date,
   createdAt: Date,

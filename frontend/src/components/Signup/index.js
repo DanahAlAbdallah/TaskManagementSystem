@@ -9,6 +9,10 @@ import 'react-toastify/dist/ReactToastify.css';
 function Signup() {
   const navigate = useNavigate();
   const [emailError, setEmailError] = useState('');
+  const [lastNameError, setLastNameError] = useState('');
+  const [genderError, setGenderError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [confirmError, setConfirmError] = useState('');
   // const [passwordMatchError, setPasswordMatchError] = useState('');
   const [firstNameError, setFirstNameError] = useState('');
   const [formData, setFormData] = useState({
@@ -38,24 +42,32 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
-    if(formData.Email === ''){
+    if(formData.firstName === ''){
+      setFirstNameError("Enter first name")
+    }else if(formData.lastName === ''){
+      setFirstNameError('')
+      setLastNameError("Enter last name")
+    }else if(formData.gender === ''){
+      setLastNameError('')
+      setGenderError("Choose your gender")
+    }
+    else if(formData.email === ''){
+      setGenderError('')
       setEmailError("Email Required");
     }else if(!isValidEmail(formData.email)){
-      setEmailError("Incorrect Email");
+      setEmailError("Invalid Email");
+    }else if(formData.password === ''){
+    setPasswordError('Enter a password')
+    }else if(!isStrongPassword(formData.password)){
+      setPasswordError('Password must contain at least one uppercase letter and one digit and of minimum length 8')
+    }else if(formData.password !== formData.confirmPassword){
+      setConfirmError('Passwords do not match')
     }
     else{
       setEmailError('');
     }
 
-    // if (formData.firstName.trim() === '') {
-    //   console.log('Setting first name error');
-    //   setFirstNameError('First name is required');
-    //   return;
-    // }
-    // console.log(firstNameError)
-    
-
+  
     
     const userData = {
       Email: formData.email,
@@ -98,10 +110,12 @@ function Signup() {
     
 
   
+  const isStrongPassword = (password) => {
+    const passwordPattern = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+    return passwordPattern.test(password);
+  };
 
-  // Function to check if the email format is valid
   const isValidEmail = (email) => {
-    // Use a regular expression to validate email format
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return emailPattern.test(email);
   };
@@ -114,7 +128,7 @@ function Signup() {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-500 md:text-2xl dark:text-white">
               Signup
             </h1>
-            <form className="space-y-4 md:space-y-2" action="#" onSubmit={handleSubmit}>
+            <form className="space-y-4 md:space-y-2" action="#" >
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label
@@ -152,7 +166,7 @@ function Signup() {
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
                   />
-                  {/* <div className="text-red-600 text-sm">{validationErrors.lastName}</div> */}
+                 <div className="text-red-600 text-sm">{lastNameError}</div>
                 </div>
               </div>
               {/* Add similar validation error messages for other fields */}
@@ -174,7 +188,7 @@ function Signup() {
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
                   />
-                  {/* <div className="text-red-600 text-sm">{validationErrors.age}</div> */}
+                  
                 </div>
                 <div>
                   <label
@@ -194,7 +208,7 @@ function Signup() {
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                   </select>
-                  {/* <div className="text-red-600 text-sm">{validationErrors.gender}</div> */}
+                  <div className="text-red-600 text-sm">{genderError}</div>
                 </div>
               </div>
               <div>
@@ -233,7 +247,7 @@ function Signup() {
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                 />
-                {/* <div className="text-red-600 text-sm">{validationErrors.password}</div> */}
+                <div className="text-red-600 text-sm">{passwordError}</div>
               </div>
               <div>
                 <label
@@ -252,9 +266,10 @@ function Signup() {
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                 />
-                {/* <div className="text-red-600 text-sm">{validationErrors.confirmPassword}</div> */}
+               <div className="text-red-600 text-sm">{confirmError}</div>
               </div>
               <button
+              onClick={handleSubmit}
                 type="submit"
                 className="w-full text-white bg-primary hover:bg-primary focus:ring-4 focus:outline-none focus:ring-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary dark:hover:bg-primary dark:focus:ring-primary"
               >

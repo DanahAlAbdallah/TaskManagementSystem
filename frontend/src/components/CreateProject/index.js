@@ -4,6 +4,7 @@ import {FaAngleRight} from "react-icons/fa";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Sidebar from '../Sidebar';
+import AddMember from '../AddMember';
 
 const CreateProject = () => {
   const [title, setProjectTitle] = useState('');
@@ -13,48 +14,31 @@ const CreateProject = () => {
   const [titleError, setTitleError] = useState('');
   const team_leader = localStorage.getItem('id');
 
+  const token  = localStorage.getItem('token')
+  if (!token){
+    window.location.href = "/login"
+  }
    // Assuming you have stored the user's ID in local storage
 const userId = localStorage.getItem('id');
-
-// Function to fetch the user's email by ID
-// const fetchUserEmail = async (userId) => {
-//   try {
-//     const response = await axios.get(`http://localhost:3000/getUser/${userId}`);
-//     const userEmail = response.data.Email;
-
-//     // Display the email on the page
-//     console.log('User Email:', userEmail);
-
-//     // You can set the email in state or display it in your component as needed
-//   } catch (error) {
-//     // Handle errors here
-//     console.error('Error fetching user email', error);
-//   }
-// };
-
-// Call the function to fetch and display the email
-
-
-
-
 
 
 
   const handleTitleChange = (e) => {
     setProjectTitle(e.target.value);
-    // Clear the title error when the user makes changes
-    setTitleError('');
+    
+    setTitleError('')
   };
 
   const handleEmailChange = (e) => {
     setMemberEmail(e.target.value);
-    // Clear the email error when the user makes changes
+    
     setEmailError('');
   };
 
   const addMember = () => {
     if (!isValidEmail(memberEmail)) {
       setEmailError('Enter a valid email');
+      console.log(memberEmail)
     } else if (memberEmail.trim() !== '') {
       setMembers([...team_members, memberEmail]);
       setMemberEmail('');
@@ -63,36 +47,32 @@ const userId = localStorage.getItem('id');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const teamleader = fetchUserEmail(userId);
+   if(title.trim() === ''){
+    setTitleError("Please enter project title")
+    console.log(emailError)
+    console.log(titleError)
+   }else{
     try {
         const response = await axios.get(`http://localhost:3000/users/getUser/${userId}`);
         const userEmail = response.data.Email;
+        // console.log('User Email:', userEmail);
     
-        // Display the email on the page
-        console.log('User Email:', userEmail);
-    
-        // You can set the email in state or display it in your component as needed
       } catch (error) {
-        // Handle errors here
         console.error('Error fetching user email', error);
       }
-    // console.log(teamleader)
-    // Create an array to store the user IDs
     const userIds = [];
   
     if (title === '') {
       setTitleError('Please enter a title');
     } else {
-      // Fetch user IDs for each email in team_members
       for (const email of team_members) {
         try {
           const response = await axios.get(`http://localhost:3000/users/getUserByEmail?email=${email}`);
           const user = response.data;
           console.log(user)
-          userIds.push(user._id); // Assuming '_id' is the field that stores user IDs
+          userIds.push(user._id); 
         } catch (error) {
           console.error(`Error fetching user with email ${email}:`, error);
-          // Handle the case where a user with a specific email is not found
         }
       }
       console.log(userIds)
@@ -100,11 +80,9 @@ const userId = localStorage.getItem('id');
 
       for (const email of team_members) {
         try {
-          const response = await axios.post("http://localhost:3000/addbyEmail", { email, team_leader });
-          // Handle the response here, if needed
+          const response = await axios.post("http://localhost:3000/addbyEmail", { email });
           console.log("Email sent successfully", response);
         } catch (error) {
-          // Handle errors here
           console.error("Email sending failed", error);
         }
       }
@@ -123,14 +101,12 @@ const userId = localStorage.getItem('id');
           console.log('Project created successfully');
         })
         .catch((error) => {
-          // Handle errors here
           console.error("Project creation failed", error);
         });
-    }
+    }}
   };
   
   const isValidEmail = (email) => {
-    // Use a regular expression to validate email format
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,5}$/;
     return emailPattern.test(email);
   };
@@ -141,7 +117,7 @@ const userId = localStorage.getItem('id');
     <div className="container mx-auto mt-10">
        <div className='text-primary text-2xl font-bold bg-white mx-auto w-1/2 p-4 md:p-6 rounded '>Create Project</div> 
       <form
-        onSubmit={handleSubmit}
+        // onSubmit={handleSubmit}
         className="bg-white mx-auto w-1/2 p-4 md:p-6 rounded shadow-md"
       >
         <div className="mb-4">
@@ -205,6 +181,7 @@ const userId = localStorage.getItem('id');
 
         <div className="mb-4">
           <button
+          onClick={handleSubmit}
             type="submit"
             className="bg-primary text-white font-semibold py-2 px-3 md:px-4 rounded hover:bg-primary"
           >

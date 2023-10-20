@@ -12,8 +12,9 @@ function Home() {
     setCurrentIndex(nextIndex);
     setCurrentText(texts[nextIndex]);
   };
-
+  
   useEffect(() => {
+    
     const timer = setInterval(updateText, 1000);
     return () => clearInterval(timer);
   }, [currentIndex]);

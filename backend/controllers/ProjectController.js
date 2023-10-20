@@ -71,10 +71,8 @@ export const getTeamMembersByProjectId = async (req, res) => {
 
     // Create an array of objects with _id and email properties
     const teamMemberEmails = teamMembers.map((member) => ({ _id: member._id, Email: member.Email }));
-    console.log(teamMemberEmails);
 
     res.json(teamMemberEmails);
-    console.log(teamMemberEmails)
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -120,6 +118,57 @@ export const updateProject = async(req, res) => {
     res.status(400).json({ message: 'Bad request' });
   }
 };
+
+
+
+export const updateProjectMembers = async (req, res) => {
+  
+  try {
+    // Get the project ID from the request parameters
+    const projectId = req.params.projectId;
+
+    // Get the member ID from the request body
+    const memberId = req.body.memberId; // Adjust this according to your request body structure
+
+    // Check if the project ID and member ID are valid before proceeding
+    if (!projectId || !memberId) {
+      return res.status(400).json({ message: 'Invalid project or member ID' });
+    }
+
+    // Update the project by pushing the new member ID to the team_members array
+    const updatedProject = await Project.findByIdAndUpdate(
+      projectId,
+      { $push: { team_members: memberId } }, // Use $push to add the memberId to the array
+      { new: true }
+    );
+
+    // Check if the project was not found
+    if (!updatedProject) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+
+    res.json(updatedProject);
+  } catch (error) {
+    res.status(400).json({ message: 'Bad request' });
+  }
+};
+
+
+// Controller function to get projects by team member ID
+export const getProjectsByTeamMember = async (req, res) => {
+  try {
+    const memberId = req.params.memberId; // Assuming the member ID is passed as a parameter in the route
+
+    // Use Mongoose to find projects where the memberId exists in the team_members array
+    const projects = await Project.find({ team_members: memberId })
+
+    res.json(projects);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching projects by team member' });
+  }
+};
+
+
 
 
 export const removeTeamMember = async (req, res) => {

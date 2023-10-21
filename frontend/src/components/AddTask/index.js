@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AddMember from '../AddMember';
+import AllTasks from '../AllTasks';
 function AddTask() {
     
       const [task, setTask] = useState('');
@@ -117,6 +118,7 @@ function AddTask() {
     };
    
       return (
+        <>
         <div className='mt-20 mb-20'>
           <div className="bg-gray-100 p-6 rounded-lg  shadow-lg flex space-x-6 w-1/2 ml-80 pr-32">
           <h3 className="text-xl text-primary font-bold mb-4">Assign Tasks:</h3>
@@ -182,6 +184,8 @@ function AddTask() {
           </div>
          
         </div>
+        <AllTasks/>
+        </>
       );
     
     

@@ -57,7 +57,7 @@ const handleLogin = (e) => {
     })
     .catch((error) => {
       // Handle errors here
-      setPasswordError('Wrong password')
+      // setPasswordError('Wrong password')
       console.error("Login failed:", error);
     });
 };

@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 const validateProjectData = (req, res, next) => {
     const { title, team_members, team_leader, related_tasks, createdAt } = req.body;
   

@@ -3,6 +3,7 @@ import React from 'react';
 function ColoredSquaresWithLabels() {
   return (
     <div className="flex justify-end ml-20 mt-24">
+      <div className='text-2xl mr-5 font-bold text-primary'>Priority:</div>
       <div className="text-center mr-4">
         <div className="w-12 h-12 bg-red-300 rounded-lg mb-2"></div>
         <div>High</div>

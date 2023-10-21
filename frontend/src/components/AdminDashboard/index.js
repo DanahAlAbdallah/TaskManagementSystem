@@ -1,8 +1,10 @@
 import React, { useState, useEffect,useRef } from 'react';
 import Chart from 'chart.js/auto';
+import { useNavigate } from 'react-router-dom';
 
 
 function AdminDashboard() {
+  const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
   const [numUsers, setNumUsers] = useState(0);
@@ -19,7 +21,6 @@ function AdminDashboard() {
       .then((response) => response.json())
       .then((data) => {
         setNumUsers(data.length);
-        console.log(data);
       })
       .catch((error) => {
         console.error('Error fetching number of users:', error);
@@ -32,7 +33,6 @@ function AdminDashboard() {
       .then((response) => response.json())
       .then((data) => {
         setNumProjects(data.length);
-        console.log(data);
       })
       .catch((error) => {
         console.error('Error fetching number of projects:', error);
@@ -45,8 +45,6 @@ function AdminDashboard() {
       .then((response) => response.json())
       .then((data) => {
         setNumTasks(data.length);
-        console.log(data);
-        console.log(data.length);
       })
       .catch((error) => {
         console.error('Error fetching number of tasks:', error);
@@ -57,64 +55,26 @@ function AdminDashboard() {
     const populateProjectTasksChart = async () => {
       try {
         // Fetch project data
-        const projectsResponse = await fetch('http://localhost:3000/projects/getProjects', {
+        const data = await fetch('http://localhost:3000/tasks/getTasks', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        if (!projectsResponse.ok) {
+        if (!data.ok) {
           console.error('Failed to fetch project data for the chart.');
           return;
         }
 
-        const projectsData = await projectsResponse.json();
-        const projectNames = projectsData.map((project) => project.title);
-
-        // Fetch task data
-        const tasksResponse = await fetch('http://localhost:3000/tasks/getTasks', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!tasksResponse.ok) {
-          console.error('Failed to fetch task data for the chart.');
-          return;
-        }
-
-        const tasksData = await tasksResponse.json();
-        console.log(tasksData);
-        // // Process your data to calculate the number of tasks in each project
-        // const taskCounts = projectNames.map((title) => {
-        //   // Find the project in projectsData with a matching title
-        //   const project = projectsData.find((project) => project.title === title);
-        // console.log(project);
-        //   // If the project was found, find and count the tasks with matching related_tasks
-        //   if (project) {
-        //     return tasksData.filter((task) => task._id === project.related_tasks._id).length;
-        //   } else {
-        //     // If the project was not found, return 0 tasks
-        //     return 0;
-        //   }
-        // });
-        const taskCounts = projectNames.map((title) => {
-          const project = projectsData.find((project) => project.title === title);
-        
-          if (project) {
-            // Check if related_tasks is an array
-            if (Array.isArray(project.related_tasks)) {
-              // Count tasks with matching _id in related_tasks
-              return project.related_tasks.filter((relatedTask) => {
-                return tasksData.some((task) => task._id === relatedTask._id);
-              }).length;
-            }
+        const tasksData = await data.json();
+        const projectsMap = new Map();
+        tasksData.map((tasks) => {
+          if(!projectsMap.has(tasks.projectId.title)){
+            projectsMap.set(tasks.projectId.title, 1)
+          } else {
+            projectsMap.set(tasks.projectId.title, projectsMap.get(tasks.projectId.title) + 1)
           }
-        
-          return 0;
-        });
-        console.log(taskCounts);
-
+        })
         
          const ctx = chartRef.current.getContext('2d');
         // Create a new Chart instance
@@ -122,11 +82,11 @@ function AdminDashboard() {
          new Chart(ctx, {
           type: 'bar',
           data: {
-            labels: projectNames,
+            labels: Array.from(projectsMap.keys()),
             datasets: [
               {
                 label: 'Number of Tasks',
-                data: taskCounts,
+                data: Array.from(projectsMap.values()),
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
@@ -149,10 +109,19 @@ function AdminDashboard() {
       
   }, [token,chartRef]);
 
+  const handleLogout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem('token')
+    localStorage.removeItem('role')
+    localStorage.removeItem('id')
+    navigate('/')
+}
+//modal
   return (
     role === 'true' ? (
       <div className='p-4 bg-white rounded shadow-lg'>
         <div className='text-2xl font-bold mb-4'>Admin Dashboard</div>
+        <button className='btn btn-primary px-4 py-2 bg-primary justify-end rounded text-white mb-5' onClick={handleLogout}>Logout</button>
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
           <div className='p-4 bg-blue-200 rounded shadow-md'>
             <div className='text-lg font-semibold'>Users</div>

@@ -3,7 +3,7 @@ import Task from '../models/Task.js';
 
 export const getTasks = async(req, res) => {
   try {
-    const tasks = await Task.find().populate({path:"author", select:['first_name','last_name']}).populate({path:"assigned_userId", select:['first_name','last_name']});
+    const tasks = await Task.find().populate({path:"author", select:['first_name','last_name']}).populate({path:"assigned_userId", select:['first_name','last_name']}).populate({path:"projectId", select:['title']});
     res.json(tasks);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });

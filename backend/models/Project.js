@@ -19,10 +19,10 @@ team_members: [
     required : true
     },
     
-    related_tasks : {
+    related_tasks : [{
     type : Schema.Types.ObjectId,
     ref : 'task'
-  },
+  }],
   createdAt : { 
   type: Schema.Types.Date,
   default: Date.now
